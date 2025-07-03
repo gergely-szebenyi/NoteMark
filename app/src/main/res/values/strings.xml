@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">NoteMark</string>
+    <string name="Label_Login">Log In</string>
+    <string name="Label_Login_Title">Capture your thoughts and ideas.</string>
+    <string name="Label_Hide_Password_VO">Hide password</string>
+    <string name="Label_Show_Password_VO">Show password</string>
+    <string name="Label_Email">Email</string>
+    <string name="Label_Password">Password</string>
+    <string name="Label_Dont_Have_Account">Don\'t have an account?</string>
+    <string name="Label_Email_Hint">john.doe@example.com</string>
 </resources>

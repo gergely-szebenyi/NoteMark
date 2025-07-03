@@ -24,11 +24,6 @@ val LightColorTheme = lightColorScheme(
     onSurfaceVariant = OnSurfaceVariant
 )
 
-val Shapes = Shapes(
-    extraSmall = RoundedCornerShape(5.dp),
-    medium = RoundedCornerShape(15.dp)
-)
-
 @Composable
 fun NoteMarkTheme(
     content: @Composable () -> Unit
@@ -36,7 +31,6 @@ fun NoteMarkTheme(
     MaterialTheme(
         colorScheme = LightColorTheme,
         typography = Typography,
-        shapes = Shapes,
         content = content
     )
 }

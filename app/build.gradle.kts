@@ -59,4 +59,10 @@ dependencies {
 
     // Splash API
     implementation(libs.core.splashscreen)
+
+    // Adaptive library (support different screen sizes)
+    implementation(libs.material3.adaptive)
+
+    // Icons
+    implementation(libs.compose.material.icons.extended)
 }

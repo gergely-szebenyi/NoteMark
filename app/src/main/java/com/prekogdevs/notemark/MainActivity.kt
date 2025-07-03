@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.prekogdevs.notemark.presentation.login.LoginScreen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,9 +23,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             NoteMarkTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(
-                        modifier = Modifier.padding(innerPadding),
-                        text = "Android"
+                    LoginScreen(
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
