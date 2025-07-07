@@ -8,8 +8,7 @@ enum class DeviceConfiguration {
     MOBILE_PORTRAIT,
     MOBILE_LANDSCAPE,
     TABLET_PORTRAIT,
-    TABLET_LANDSCAPE,
-    DESKTOP;
+    TABLET_LANDSCAPE;
 
     companion object {
         fun fromWindowSizeClass(windowSizeClass: WindowSizeClass): DeviceConfiguration {
@@ -27,7 +26,7 @@ enum class DeviceConfiguration {
                         heightClass == WindowHeightSizeClass.EXPANDED -> TABLET_PORTRAIT
                 widthClass == WindowWidthSizeClass.EXPANDED &&
                         heightClass == WindowHeightSizeClass.MEDIUM -> TABLET_LANDSCAPE
-                else -> DESKTOP
+                else -> throw Exception("Unknown device configuration")
             }
         }
     }

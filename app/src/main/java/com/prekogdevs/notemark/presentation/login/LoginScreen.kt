@@ -3,6 +3,7 @@ package com.prekogdevs.notemark.presentation.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,102 +33,140 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
 import com.prekogdevs.notemark.presentation.NoteMarkLink
 import com.prekogdevs.notemark.presentation.NoteMarkTextField
+import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
-    var emailText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.statusBars
     ) { innerPadding ->
-        val rootModifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .clip(
-                RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp
-                )
-            )
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            .padding(
-                horizontal = 16.dp,
-                vertical = 24.dp
-            )
-            .consumeWindowInsets(WindowInsets.navigationBars)
+        val rootModifier = Modifier.landingCardModifier(innerPadding)
 
         val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
         val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
         when (deviceConfiguration) {
             DeviceConfiguration.MOBILE_PORTRAIT -> {
-                Column(
+                MobilePortraitLoginScreen(
                     modifier = rootModifier,
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    LoginHeaderSection(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    LoginFormSection(
-                        modifier = Modifier.fillMaxWidth(),
-                        emailText = emailText,
-                        onEmailTextChange = { emailText = it },
-                        passwordText = passwordText,
-                        onPasswordTextChange = { passwordText = it }
-                    )
-                }
+                    email = email,
+                    onEmailChanged = { email = it },
+                    password = email,
+                    onPasswordChanged = { password = it }
+                )
             }
 
             DeviceConfiguration.MOBILE_LANDSCAPE -> {
-                Row(
-                    modifier = rootModifier
-                        .windowInsetsPadding(WindowInsets.displayCutout)
-                        .padding(horizontal = 32.dp),
-                    horizontalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    LoginHeaderSection(modifier = Modifier.weight(1f))
-                    LoginFormSection(
-                        modifier = Modifier
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState()),
-                        emailText = emailText,
-                        onEmailTextChange = { emailText = it },
-                        passwordText = passwordText,
-                        onPasswordTextChange = { passwordText = it }
-                    )
-                }
+                MobileLandscapeLoginScreen(
+                    modifier = rootModifier,
+                    email = email,
+                    onEmailChanged = { email = it },
+                    password = email,
+                    onPasswordChanged = { password = it }
+                )
             }
 
             DeviceConfiguration.TABLET_PORTRAIT,
-            DeviceConfiguration.TABLET_LANDSCAPE,
-            DeviceConfiguration.DESKTOP -> {
-                Column(
-                    modifier = rootModifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(top = 48.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    LoginHeaderSection(
-                        modifier = Modifier.widthIn(max = 540.dp),
-                        alignment = Alignment.CenterHorizontally
-                    )
-                    LoginFormSection(
-                        modifier = Modifier.widthIn(max = 540.dp),
-                        emailText = emailText,
-                        onEmailTextChange = { emailText = it },
-                        passwordText = passwordText,
-                        onPasswordTextChange = { passwordText = it }
-                    )
-                }
+            DeviceConfiguration.TABLET_LANDSCAPE -> {
+                TabletLoginScreen(
+                    modifier = rootModifier,
+                    email = email,
+                    onEmailChanged = { email = it },
+                    password = email,
+                    onPasswordChanged = { password = it }
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun MobilePortraitLoginScreen(
+    modifier: Modifier = Modifier,
+    email : String,
+    onEmailChanged: (String) -> Unit,
+    password : String,
+    onPasswordChanged: (String) -> Unit
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        LoginHeaderSection(
+            modifier = Modifier.fillMaxWidth()
+        )
+        LoginFormSection(
+            modifier = Modifier.fillMaxWidth(),
+            email = email,
+            onEmailChanged = onEmailChanged,
+            password = password,
+            onPasswordChanged = onPasswordChanged
+        )
+    }
+}
+
+@Composable
+private fun MobileLandscapeLoginScreen(
+    modifier: Modifier = Modifier,
+    email : String,
+    onEmailChanged: (String) -> Unit,
+    password : String,
+    onPasswordChanged: (String) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .windowInsetsPadding(WindowInsets.displayCutout)
+            .padding(horizontal = 32.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        LoginHeaderSection(modifier = Modifier.weight(1f))
+        LoginFormSection(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            email = email,
+            onEmailChanged = onEmailChanged,
+            password = password,
+            onPasswordChanged = onPasswordChanged
+        )
+    }
+}
+
+@Composable
+private fun TabletLoginScreen(
+    modifier: Modifier = Modifier,
+    email : String,
+    onEmailChanged: (String) -> Unit,
+    password : String,
+    onPasswordChanged: (String) -> Unit
+) {
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(top = 48.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LoginHeaderSection(
+            modifier = Modifier.widthIn(max = 540.dp),
+            alignment = Alignment.CenterHorizontally
+        )
+        LoginFormSection(
+            modifier = Modifier.widthIn(max = 540.dp),
+            email = email,
+            onEmailChanged = onEmailChanged,
+            password = password,
+            onPasswordChanged = onPasswordChanged
+        )
     }
 }
 
@@ -154,18 +193,18 @@ private fun LoginHeaderSection(
 @Composable
 private fun LoginFormSection(
     modifier: Modifier = Modifier,
-    emailText: String,
-    onEmailTextChange: (String) -> Unit,
-    passwordText: String,
-    onPasswordTextChange: (String) -> Unit
+    email: String,
+    onEmailChanged: (String) -> Unit,
+    password: String,
+    onPasswordChanged: (String) -> Unit
 ) {
     Column(
         modifier = modifier
     ) {
         NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = emailText,
-            onValueChange = onEmailTextChange,
+            text = email,
+            onValueChange = onEmailChanged,
             label = stringResource(R.string.Label_Email),
             hint = stringResource(R.string.Label_Email_Hint),
             isInputSecret = false
@@ -173,8 +212,8 @@ private fun LoginFormSection(
         Spacer(modifier = Modifier.height(16.dp))
         NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = passwordText,
-            onValueChange = onPasswordTextChange,
+            text = password,
+            onValueChange = onPasswordChanged,
             label = stringResource(R.string.Label_Password),
             hint = stringResource(R.string.Label_Password),
             isInputSecret = true
@@ -197,3 +236,90 @@ private fun LoginFormSection(
         )
     }
 }
+
+// Phone - Portrait (e.g., Pixel 5)
+@Preview(
+    name = "Phone - Portrait",
+    showBackground = true,
+    widthDp = 412,
+    heightDp = 892
+)
+@Composable
+private fun MobilePortraitLoginScreenPreview() {
+    NoteMarkTheme {
+        MobilePortraitLoginScreen(
+            modifier = Modifier.landingCardModifier(),
+            email = "John Doe",
+            onEmailChanged = {},
+            password = "",
+            onPasswordChanged = {}
+        )
+    }
+}
+
+// Phone - Landscape
+@Preview(
+    name = "Phone - Landscape",
+    showBackground = true,
+    widthDp = 892,
+    heightDp = 412
+)
+@Composable
+private fun MobileLandscapeLandingScreenPreview() {
+    NoteMarkTheme {
+        MobileLandscapeLoginScreen(
+            modifier = Modifier.landingCardModifier(),
+            email = "John Doe",
+            onEmailChanged = {},
+            password = "",
+            onPasswordChanged = {}
+        )
+    }
+}
+
+
+// Tablet - Portrait (e.g., 10-inch tablet)
+@Preview(
+    name = "Tablet - Portrait",
+    showBackground = true,
+    widthDp = 800,
+    heightDp = 1280
+)
+// Tablet - Landscape
+@Preview(
+    name = "Tablet - Landscape",
+    showBackground = true,
+    widthDp = 1280,
+    heightDp = 800
+)
+@Composable
+private fun TabletLoginScreenPreview() {
+    NoteMarkTheme {
+        TabletLoginScreen(
+            modifier = Modifier.landingCardModifier(),
+            email = "John Doe",
+            onEmailChanged = {},
+            password = "",
+            onPasswordChanged = {}
+        )
+    }
+}
+
+@Composable
+private fun Modifier.landingCardModifier(
+    innerPadding: PaddingValues = PaddingValues(8.dp)
+) = this
+    .fillMaxSize()
+    .padding(innerPadding)
+    .clip(
+        RoundedCornerShape(
+            topStart = 20.dp,
+            topEnd = 20.dp
+        )
+    )
+    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+    .padding(
+        horizontal = 16.dp,
+        vertical = 24.dp
+    )
+    .consumeWindowInsets(WindowInsets.navigationBars)
