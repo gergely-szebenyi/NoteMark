@@ -8,4 +8,9 @@
     <string name="Label_Password">Password</string>
     <string name="Label_Dont_Have_Account">Don\'t have an account?</string>
     <string name="Label_Email_Hint">john.doe@example.com</string>
+    <string name="Label_Landing_Title">Your Own Collection of Notes</string>
+    <string name="Label_Landing_Subtitle">Capture your thoughts and ideas.</string>
+    <string name="Label_Get_Started">Get Started</string>
+    <string name="Label_Log_In">Log In</string>
+    <string name="Label_Landing_Background_VO">Landing background</string>
 </resources>
