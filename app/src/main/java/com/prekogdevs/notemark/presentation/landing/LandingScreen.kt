@@ -173,7 +173,7 @@ private fun LandingCard(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.Label_Get_Started),
             onClick = {
-
+                // TODO: Navigate to RegistrationScreen
             }
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -181,7 +181,7 @@ private fun LandingCard(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.Label_Log_In),
             onClick = {
-
+                // TODO: Navigate to LoginScreen
             },
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             textColor = MaterialTheme.colorScheme.primary

@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.prekogdevs.notemark.presentation.landing.LandingScreen
 import com.prekogdevs.notemark.presentation.login.LoginScreen
+import com.prekogdevs.notemark.presentation.registration.RegistrationScreen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +26,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NoteMarkTheme {
+                // TODO: Create navigation
+                // TODO: Check padding in children (paddingValues)
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LandingScreen(
+                    RegistrationScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

@@ -1,4 +1,4 @@
-package com.prekogdevs.notemark.presentation.login
+package com.prekogdevs.notemark.presentation.registration
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,16 +6,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,60 +34,73 @@ import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(modifier: Modifier = Modifier) {
     // TODO: Move logic to VM
-    // TODO: Login button is only enabled when both email and password input is not blank and the email is a valid email
-    // TODO: API call, error handling, loading indicator
+    // TODO: Reduce copy paste
+    // TODO: Make screen scrollable?
+    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets.statusBars
-    ) { innerPadding ->
-        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-        val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
-        when (deviceConfiguration) {
-            DeviceConfiguration.MOBILE_PORTRAIT -> {
-                MobilePortraitLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
-                )
-            }
+    var passwordRepeated by remember { mutableStateOf("") }
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
+    when (deviceConfiguration) {
+        DeviceConfiguration.MOBILE_PORTRAIT -> {
+            MobilePortraitRegistrationScreen(
+                modifier = modifier.landingCardModifier(),
+                username = username,
+                onUsernameChanged = { username = it },
+                email = email,
+                onEmailChanged = { email = it },
+                password = password,
+                onPasswordChanged = { password = it },
+                passwordRepeated = passwordRepeated,
+                onRepeatedPasswordChanged = { passwordRepeated = it }
+            )
+        }
 
-            DeviceConfiguration.MOBILE_LANDSCAPE -> {
-                MobileLandscapeLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
-                )
-            }
+        DeviceConfiguration.MOBILE_LANDSCAPE -> {
+            MobileLandscapeRegistrationScreen(
+                modifier = modifier.landingCardModifier(),
+                username = username,
+                onUsernameChanged = { username = it },
+                email = email,
+                onEmailChanged = { email = it },
+                password = password,
+                onPasswordChanged = { password = it },
+                passwordRepeated = passwordRepeated,
+                onRepeatedPasswordChanged = { passwordRepeated = it }
+            )
+        }
 
-            DeviceConfiguration.TABLET_PORTRAIT,
-            DeviceConfiguration.TABLET_LANDSCAPE -> {
-                TabletLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
-                )
-            }
+        DeviceConfiguration.TABLET_PORTRAIT,
+        DeviceConfiguration.TABLET_LANDSCAPE -> {
+            TabletRegistrationScreen(
+                modifier = modifier.landingCardModifier(),
+                username = username,
+                onUsernameChanged = { username = it },
+                email = email,
+                onEmailChanged = { email = it },
+                password = password,
+                onPasswordChanged = { password = it },
+                passwordRepeated = passwordRepeated,
+                onRepeatedPasswordChanged = { passwordRepeated = it }
+            )
         }
     }
 }
 
 @Composable
-private fun MobilePortraitLoginScreen(
+private fun MobilePortraitRegistrationScreen(
     modifier: Modifier = Modifier,
-    email : String,
+    username: String,
+    onUsernameChanged: (String) -> Unit,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
-    onPasswordChanged: (String) -> Unit
+    password: String,
+    onPasswordChanged: (String) -> Unit,
+    passwordRepeated: String,
+    onRepeatedPasswordChanged: (String) -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -98,26 +108,34 @@ private fun MobilePortraitLoginScreen(
     ) {
         NoteMarkHeader(
             modifier = Modifier.fillMaxWidth(),
-            title = stringResource(R.string.Label_Login_Title),
+            title = stringResource(R.string.Label_Create_Account),
             subtitle = stringResource(R.string.Label_Capture_Your_Thoughts)
         )
-        LoginFormSection(
+        RegistrationFormSection(
             modifier = Modifier.fillMaxWidth(),
+            username = username,
+            onUsernameChanged = onUsernameChanged,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            passwordRepeated = passwordRepeated,
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged
         )
     }
 }
 
 @Composable
-private fun MobileLandscapeLoginScreen(
+private fun MobileLandscapeRegistrationScreen(
     modifier: Modifier = Modifier,
-    email : String,
+    username: String,
+    onUsernameChanged: (String) -> Unit,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
-    onPasswordChanged: (String) -> Unit
+    password: String,
+    onPasswordChanged: (String) -> Unit,
+    passwordRepeated: String,
+    onRepeatedPasswordChanged: (String) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -127,28 +145,36 @@ private fun MobileLandscapeLoginScreen(
     ) {
         NoteMarkHeader(
             modifier = Modifier.weight(1f),
-            title = stringResource(R.string.Label_Login_Title),
+            title = stringResource(R.string.Label_Create_Account),
             subtitle = stringResource(R.string.Label_Capture_Your_Thoughts)
         )
-        LoginFormSection(
+        RegistrationFormSection(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState()),
+            username = username,
+            onUsernameChanged = onUsernameChanged,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            passwordRepeated = passwordRepeated,
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged
         )
     }
 }
 
 @Composable
-private fun TabletLoginScreen(
+private fun TabletRegistrationScreen(
     modifier: Modifier = Modifier,
-    email : String,
+    username: String,
+    onUsernameChanged: (String) -> Unit,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
-    onPasswordChanged: (String) -> Unit
+    password: String,
+    onPasswordChanged: (String) -> Unit,
+    passwordRepeated: String,
+    onRepeatedPasswordChanged: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -160,30 +186,47 @@ private fun TabletLoginScreen(
         NoteMarkHeader(
             modifier = Modifier.widthIn(max = 540.dp),
             alignment = Alignment.CenterHorizontally,
-            title = stringResource(R.string.Label_Login_Title),
+            title = stringResource(R.string.Label_Create_Account),
             subtitle = stringResource(R.string.Label_Capture_Your_Thoughts)
         )
-        LoginFormSection(
+        RegistrationFormSection(
             modifier = Modifier.widthIn(max = 540.dp),
+            username = username,
+            onUsernameChanged = onUsernameChanged,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            passwordRepeated = passwordRepeated,
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged
         )
     }
 }
 
 @Composable
-private fun LoginFormSection(
+private fun RegistrationFormSection(
     modifier: Modifier = Modifier,
+    username: String,
+    onUsernameChanged: (String) -> Unit,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    passwordRepeated: String,
+    onRepeatedPasswordChanged: (String) -> Unit
 ) {
     Column(
         modifier = modifier
     ) {
+        NoteMarkTextField(
+            modifier = Modifier.fillMaxWidth(),
+            text = username,
+            onValueChange = onUsernameChanged,
+            label = stringResource(R.string.Label_Registration_Username),
+            hint = stringResource(R.string.Label_Registration_Username_Hint),
+            isInputSecret = false
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
             text = email,
@@ -201,10 +244,19 @@ private fun LoginFormSection(
             hint = stringResource(R.string.Label_Password),
             isInputSecret = true
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        NoteMarkTextField(
+            modifier = Modifier.fillMaxWidth(),
+            text = passwordRepeated,
+            onValueChange = onRepeatedPasswordChanged,
+            label = stringResource(R.string.Label_Repeat_Password),
+            hint = stringResource(R.string.Label_Password),
+            isInputSecret = true
+        )
         Spacer(modifier = Modifier.height(24.dp))
         NoteMarkButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.Label_Login_Title),
+            text = stringResource(R.string.Label_Create_Account),
             onClick = {
                 // TODO
             }
@@ -212,9 +264,9 @@ private fun LoginFormSection(
         Spacer(modifier = Modifier.height(16.dp))
         NoteMarkLink(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = stringResource(R.string.Label_Dont_Have_Account),
+            text = stringResource(R.string.Label_Already_Have_Account),
             onClick = {
-                // TODO: Navigate to RegistrationScreen
+                // TODO
             }
         )
     }
@@ -228,14 +280,18 @@ private fun LoginFormSection(
     heightDp = 892
 )
 @Composable
-private fun MobilePortraitLoginScreenPreview() {
+private fun MobilePortraitRegistrationScreenPreview() {
     NoteMarkTheme {
-        MobilePortraitLoginScreen(
+        MobilePortraitRegistrationScreen(
             modifier = Modifier.landingCardModifier(),
+            username = "John.doe",
+            onUsernameChanged = {},
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            passwordRepeated = "",
+            onRepeatedPasswordChanged = {}
         )
     }
 }
@@ -248,14 +304,18 @@ private fun MobilePortraitLoginScreenPreview() {
     heightDp = 412
 )
 @Composable
-private fun MobileLandscapeLoginScreenPreview() {
+private fun MobileLandscapeRegistrationScreenPreview() {
     NoteMarkTheme {
-        MobileLandscapeLoginScreen(
+        MobileLandscapeRegistrationScreen(
             modifier = Modifier.landingCardModifier(),
+            username = "John.doe",
+            onUsernameChanged = {},
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            passwordRepeated = "",
+            onRepeatedPasswordChanged = {}
         )
     }
 }
@@ -276,14 +336,18 @@ private fun MobileLandscapeLoginScreenPreview() {
     heightDp = 800
 )
 @Composable
-private fun TabletLoginScreenPreview() {
+private fun TabletRegistrationScreenPreview() {
     NoteMarkTheme {
-        TabletLoginScreen(
+        TabletRegistrationScreen(
             modifier = Modifier.landingCardModifier(),
+            username = "John.doe",
+            onUsernameChanged = {},
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            passwordRepeated = "",
+            onRepeatedPasswordChanged = {}
         )
     }
 }

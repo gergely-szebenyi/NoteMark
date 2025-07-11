@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NoteMark</string>
-    <string name="Label_Login">Log In</string>
-    <string name="Label_Login_Title">Capture your thoughts and ideas.</string>
+    <string name="Label_Login_Title">Log In</string>
+    <string name="Label_Capture_Your_Thoughts">Capture your thoughts and ideas.</string>
     <string name="Label_Hide_Password_VO">Hide password</string>
     <string name="Label_Show_Password_VO">Show password</string>
     <string name="Label_Email">Email</string>
@@ -13,4 +13,9 @@
     <string name="Label_Get_Started">Get Started</string>
     <string name="Label_Log_In">Log In</string>
     <string name="Label_Landing_Background_VO">Landing background</string>
+    <string name="Label_Create_Account">Create account</string>
+    <string name="Label_Registration_Username">Username</string>
+    <string name="Label_Registration_Username_Hint">John.doe</string>
+    <string name="Label_Repeat_Password">Repeat password</string>
+    <string name="Label_Already_Have_Account">Already have an account?</string>
 </resources>
