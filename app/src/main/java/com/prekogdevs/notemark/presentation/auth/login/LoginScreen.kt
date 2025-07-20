@@ -1,5 +1,6 @@
-package com.prekogdevs.notemark.presentation.login
+package com.prekogdevs.notemark.presentation.auth.login
 
+import android.R.attr.password
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +15,12 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.prekogdevs.notemark.R
@@ -35,14 +39,15 @@ import com.prekogdevs.notemark.presentation.components.NoteMarkHeader
 import com.prekogdevs.notemark.presentation.landingCardModifier
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-    // TODO: Move logic to VM
-    // TODO: Login button is only enabled when both email and password input is not blank and the email is a valid email
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = koinViewModel()
+) {
+    val uiState by viewModel.state.collectAsState()
     // TODO: API call, error handling, loading indicator
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.statusBars
@@ -53,20 +58,30 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             DeviceConfiguration.MOBILE_PORTRAIT -> {
                 MobilePortraitLoginScreen(
                     modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
+                    canLogin = uiState.canLogin,
+                    email = uiState.email,
+                    onEmailChanged = {
+                        viewModel.onEvent(Event.OnEmailChanged(it))
+                    },
+                    password = uiState.password,
+                    onPasswordChanged = {
+                        viewModel.onEvent(Event.OnPasswordChanged(it))
+                    }
                 )
             }
 
             DeviceConfiguration.MOBILE_LANDSCAPE -> {
                 MobileLandscapeLoginScreen(
                     modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
+                    canLogin = uiState.canLogin,
+                    email = uiState.email,
+                    onEmailChanged = {
+                        viewModel.onEvent(Event.OnEmailChanged(it))
+                    },
+                    password = uiState.password,
+                    onPasswordChanged = {
+                        viewModel.onEvent(Event.OnPasswordChanged(it))
+                    }
                 )
             }
 
@@ -74,10 +89,15 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             DeviceConfiguration.TABLET_LANDSCAPE -> {
                 TabletLoginScreen(
                     modifier = Modifier.landingCardModifier(innerPadding),
-                    email = email,
-                    onEmailChanged = { email = it },
-                    password = password,
-                    onPasswordChanged = { password = it }
+                    canLogin = uiState.canLogin,
+                    email = uiState.email,
+                    onEmailChanged = {
+                        viewModel.onEvent(Event.OnEmailChanged(it))
+                    },
+                    password = uiState.password,
+                    onPasswordChanged = {
+                        viewModel.onEvent(Event.OnPasswordChanged(it))
+                    }
                 )
             }
         }
@@ -87,6 +107,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun MobilePortraitLoginScreen(
     modifier: Modifier = Modifier,
+    canLogin : Boolean,
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
@@ -103,6 +124,7 @@ private fun MobilePortraitLoginScreen(
         )
         LoginFormSection(
             modifier = Modifier.fillMaxWidth(),
+            canLogin = canLogin,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
@@ -114,6 +136,7 @@ private fun MobilePortraitLoginScreen(
 @Composable
 private fun MobileLandscapeLoginScreen(
     modifier: Modifier = Modifier,
+    canLogin : Boolean,
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
@@ -134,6 +157,7 @@ private fun MobileLandscapeLoginScreen(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState()),
+            canLogin = canLogin,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
@@ -145,6 +169,7 @@ private fun MobileLandscapeLoginScreen(
 @Composable
 private fun TabletLoginScreen(
     modifier: Modifier = Modifier,
+    canLogin : Boolean,
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
@@ -165,6 +190,7 @@ private fun TabletLoginScreen(
         )
         LoginFormSection(
             modifier = Modifier.widthIn(max = 540.dp),
+            canLogin = canLogin,
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
@@ -176,6 +202,7 @@ private fun TabletLoginScreen(
 @Composable
 private fun LoginFormSection(
     modifier: Modifier = Modifier,
+    canLogin : Boolean,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
@@ -186,6 +213,7 @@ private fun LoginFormSection(
     ) {
         NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
             text = email,
             onValueChange = onEmailChanged,
             label = stringResource(R.string.Label_Email),
@@ -195,6 +223,7 @@ private fun LoginFormSection(
         Spacer(modifier = Modifier.height(16.dp))
         NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
             text = password,
             onValueChange = onPasswordChanged,
             label = stringResource(R.string.Label_Password),
@@ -204,6 +233,7 @@ private fun LoginFormSection(
         Spacer(modifier = Modifier.height(24.dp))
         NoteMarkButton(
             modifier = Modifier.fillMaxWidth(),
+            enabled = canLogin,
             text = stringResource(R.string.Label_Login_Title),
             onClick = {
                 // TODO
@@ -232,6 +262,7 @@ private fun MobilePortraitLoginScreenPreview() {
     NoteMarkTheme {
         MobilePortraitLoginScreen(
             modifier = Modifier.landingCardModifier(),
+            canLogin = false,
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
@@ -252,6 +283,7 @@ private fun MobileLandscapeLoginScreenPreview() {
     NoteMarkTheme {
         MobileLandscapeLoginScreen(
             modifier = Modifier.landingCardModifier(),
+            canLogin = false,
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
@@ -280,6 +312,7 @@ private fun TabletLoginScreenPreview() {
     NoteMarkTheme {
         TabletLoginScreen(
             modifier = Modifier.landingCardModifier(),
+            canLogin = false,
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",

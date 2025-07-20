@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NoteMarkButton(
     modifier: Modifier = Modifier,
+    enabled : Boolean = true,
     text: String,
     onClick: () -> Unit,
     containerColor : Color = MaterialTheme.colorScheme.primary,
@@ -26,6 +27,7 @@ fun NoteMarkButton(
             color = textColor,
             shape = RoundedCornerShape(10.dp),
         ),
+        enabled = enabled,
         onClick = onClick,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
