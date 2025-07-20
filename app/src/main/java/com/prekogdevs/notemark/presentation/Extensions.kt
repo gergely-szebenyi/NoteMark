@@ -15,20 +15,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Modifier.landingCardModifier(
-    innerPadding: PaddingValues = PaddingValues(0.dp)
-) = this
-    .fillMaxSize()
-    .padding(innerPadding)
-    .clip(
-        RoundedCornerShape(
-            topStart = 20.dp,
-            topEnd = 20.dp
+internal fun Modifier.landingCardModifier() =
+    this.fillMaxSize()
+        .clip(
+            RoundedCornerShape(
+                topStart = 20.dp,
+                topEnd = 20.dp
+            )
         )
-    )
-    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-    .padding(
-        horizontal = 16.dp,
-        vertical = 24.dp
-    )
-    .consumeWindowInsets(WindowInsets.navigationBars)
+        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+        .padding(
+            horizontal = 16.dp,
+            vertical = 24.dp
+        )
+        .consumeWindowInsets(WindowInsets.navigationBars)

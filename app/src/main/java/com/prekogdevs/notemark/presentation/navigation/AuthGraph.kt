@@ -26,9 +26,9 @@ fun NavGraphBuilder.authGraph(
         )
     }
     addScreen(baseRoute = Screen.AuthFlow.Registration.route) {
-        // TODO: Pass viewModel
         RegistrationScreen(
-            navController = navController
+            navController = navController,
+            viewModel = koinViewModel()
         )
     }
 }

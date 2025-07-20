@@ -34,6 +34,7 @@ import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
 // TODO: Reduce boilerplate
+// TODO: WindowsInsets
 @Composable
 fun LandingScreen(
     modifier: Modifier = Modifier,

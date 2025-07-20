@@ -1,5 +1,6 @@
 package com.prekogdevs.notemark.presentation.auth.registration
 
+import android.R.attr.password
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,10 +16,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,30 +37,34 @@ import com.prekogdevs.notemark.util.DeviceConfiguration
 @Composable
 fun RegistrationScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: RegistrationViewModel
 ) {
-    // TODO: Move logic to VM
     // TODO: Reduce copy paste
     // TODO: Make screen scrollable?
-    // TODO: Top part of the screen does not match design
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordRepeated by remember { mutableStateOf("") }
+    val uiState by viewModel.state.collectAsState()
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
     when (deviceConfiguration) {
         DeviceConfiguration.MOBILE_PORTRAIT -> {
             MobilePortraitRegistrationScreen(
                 modifier = modifier.landingCardModifier(),
-                username = username,
-                onUsernameChanged = { username = it },
-                email = email,
-                onEmailChanged = { email = it },
-                password = password,
-                onPasswordChanged = { password = it },
-                passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it },
+                username = uiState.username,
+                onUsernameChanged = {
+                    viewModel.onEvent(Event.OnUsernameChanged(it))
+                },
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                passwordRepeated = uiState.passwordRepeated,
+                onRepeatedPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordRepeatedChanged(it))
+                },
                 onAlreadyHaveAnAccountClick = {
                     navController.navigate(Screen.AuthFlow.Login.route)
                 }
@@ -71,14 +74,22 @@ fun RegistrationScreen(
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
             MobileLandscapeRegistrationScreen(
                 modifier = modifier.landingCardModifier(),
-                username = username,
-                onUsernameChanged = { username = it },
-                email = email,
-                onEmailChanged = { email = it },
-                password = password,
-                onPasswordChanged = { password = it },
-                passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it },
+                username = uiState.username,
+                onUsernameChanged = {
+                    viewModel.onEvent(Event.OnUsernameChanged(it))
+                },
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                passwordRepeated = uiState.password,
+                onRepeatedPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordRepeatedChanged(it))
+                },
                 onAlreadyHaveAnAccountClick = {
                     navController.navigate(Screen.AuthFlow.Login.route)
                 }
@@ -89,14 +100,22 @@ fun RegistrationScreen(
         DeviceConfiguration.TABLET_LANDSCAPE -> {
             TabletRegistrationScreen(
                 modifier = modifier.landingCardModifier(),
-                username = username,
-                onUsernameChanged = { username = it },
-                email = email,
-                onEmailChanged = { email = it },
-                password = password,
-                onPasswordChanged = { password = it },
-                passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it },
+                username = uiState.username,
+                onUsernameChanged = {
+                    viewModel.onEvent(Event.OnUsernameChanged(it))
+                },
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                passwordRepeated = uiState.password,
+                onRepeatedPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordRepeatedChanged(it))
+                },
                 onAlreadyHaveAnAccountClick = {
                     navController.navigate(Screen.AuthFlow.Login.route)
                 }

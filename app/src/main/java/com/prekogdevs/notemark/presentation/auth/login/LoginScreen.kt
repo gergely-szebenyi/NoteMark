@@ -50,80 +50,74 @@ fun LoginScreen(
     navController: NavController
 ) {
     val uiState by viewModel.state.collectAsState()
-    // TODO: API call, error handling, loading indicator
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets.statusBars
-    ) { innerPadding ->
-        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-        val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
-        when (deviceConfiguration) {
-            DeviceConfiguration.MOBILE_PORTRAIT -> {
-                MobilePortraitLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    canLogin = uiState.canLogin,
-                    email = uiState.email,
-                    onEmailChanged = {
-                        viewModel.onEvent(Event.OnEmailChanged(it))
-                    },
-                    password = uiState.password,
-                    onPasswordChanged = {
-                        viewModel.onEvent(Event.OnPasswordChanged(it))
-                    },
-                    onRegistrationClick = {
-                        navController.navigate(Screen.AuthFlow.Registration.route) {
-                            popUpTo(Screen.AuthFlow.Landing.route) {
-                                inclusive = false
-                            }
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
+    when (deviceConfiguration) {
+        DeviceConfiguration.MOBILE_PORTRAIT -> {
+            MobilePortraitLoginScreen(
+                modifier = modifier.landingCardModifier(),
+                canLogin = uiState.canLogin,
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route) {
+                        popUpTo(Screen.AuthFlow.Landing.route) {
+                            inclusive = false
                         }
                     }
-                )
-            }
+                }
+            )
+        }
 
-            DeviceConfiguration.MOBILE_LANDSCAPE -> {
-                MobileLandscapeLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    canLogin = uiState.canLogin,
-                    email = uiState.email,
-                    onEmailChanged = {
-                        viewModel.onEvent(Event.OnEmailChanged(it))
-                    },
-                    password = uiState.password,
-                    onPasswordChanged = {
-                        viewModel.onEvent(Event.OnPasswordChanged(it))
-                    },
-                    onRegistrationClick = {
-                        navController.navigate(Screen.AuthFlow.Registration.route) {
-                            popUpTo(Screen.AuthFlow.Landing.route) {
-                                inclusive = false
-                            }
+        DeviceConfiguration.MOBILE_LANDSCAPE -> {
+            MobileLandscapeLoginScreen(
+                modifier = modifier.landingCardModifier(),
+                canLogin = uiState.canLogin,
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route) {
+                        popUpTo(Screen.AuthFlow.Landing.route) {
+                            inclusive = false
                         }
                     }
-                )
-            }
+                }
+            )
+        }
 
-            DeviceConfiguration.TABLET_PORTRAIT,
-            DeviceConfiguration.TABLET_LANDSCAPE -> {
-                TabletLoginScreen(
-                    modifier = Modifier.landingCardModifier(innerPadding),
-                    canLogin = uiState.canLogin,
-                    email = uiState.email,
-                    onEmailChanged = {
-                        viewModel.onEvent(Event.OnEmailChanged(it))
-                    },
-                    password = uiState.password,
-                    onPasswordChanged = {
-                        viewModel.onEvent(Event.OnPasswordChanged(it))
-                    },
-                    onRegistrationClick = {
-                        navController.navigate(Screen.AuthFlow.Registration.route) {
-                            popUpTo(Screen.AuthFlow.Landing.route) {
-                                inclusive = false
-                            }
+        DeviceConfiguration.TABLET_PORTRAIT,
+        DeviceConfiguration.TABLET_LANDSCAPE -> {
+            TabletLoginScreen(
+                modifier = modifier.landingCardModifier(),
+                canLogin = uiState.canLogin,
+                email = uiState.email,
+                onEmailChanged = {
+                    viewModel.onEvent(Event.OnEmailChanged(it))
+                },
+                password = uiState.password,
+                onPasswordChanged = {
+                    viewModel.onEvent(Event.OnPasswordChanged(it))
+                },
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route) {
+                        popUpTo(Screen.AuthFlow.Landing.route) {
+                            inclusive = false
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -131,10 +125,10 @@ fun LoginScreen(
 @Composable
 private fun MobilePortraitLoginScreen(
     modifier: Modifier = Modifier,
-    canLogin : Boolean,
-    email : String,
+    canLogin: Boolean,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
+    password: String,
     onPasswordChanged: (String) -> Unit,
     onRegistrationClick: () -> Unit
 ) {
@@ -162,10 +156,10 @@ private fun MobilePortraitLoginScreen(
 @Composable
 private fun MobileLandscapeLoginScreen(
     modifier: Modifier = Modifier,
-    canLogin : Boolean,
-    email : String,
+    canLogin: Boolean,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
+    password: String,
     onPasswordChanged: (String) -> Unit,
     onRegistrationClick: () -> Unit
 ) {
@@ -197,10 +191,10 @@ private fun MobileLandscapeLoginScreen(
 @Composable
 private fun TabletLoginScreen(
     modifier: Modifier = Modifier,
-    canLogin : Boolean,
-    email : String,
+    canLogin: Boolean,
+    email: String,
     onEmailChanged: (String) -> Unit,
-    password : String,
+    password: String,
     onPasswordChanged: (String) -> Unit,
     onRegistrationClick: () -> Unit
 ) {
@@ -232,7 +226,7 @@ private fun TabletLoginScreen(
 @Composable
 private fun LoginFormSection(
     modifier: Modifier = Modifier,
-    canLogin : Boolean,
+    canLogin: Boolean,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
