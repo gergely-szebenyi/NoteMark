@@ -1,4 +1,4 @@
-package com.prekogdevs.notemark.presentation.landing
+package com.prekogdevs.notemark.presentation.auth.landing
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,34 +26,66 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
+import com.prekogdevs.notemark.presentation.navigation.Screen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
+// TODO: Reduce boilerplate
 @Composable
-fun LandingScreen(modifier: Modifier = Modifier) {
+fun LandingScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
     when (deviceConfiguration) {
         DeviceConfiguration.MOBILE_PORTRAIT -> {
-            MobilePortraitLandingScreen(modifier = modifier)
+            MobilePortraitLandingScreen(
+                modifier = modifier,
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route)
+                },
+                onLoginClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
+            )
         }
 
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
-            MobileLandscapeLandingScreen(modifier = modifier)
+            MobileLandscapeLandingScreen(
+                modifier = modifier,
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route)
+                },
+                onLoginClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
+            )
         }
 
         DeviceConfiguration.TABLET_PORTRAIT,
         DeviceConfiguration.TABLET_LANDSCAPE -> {
-            TabletLandingScreen(modifier = modifier)
+            TabletLandingScreen(
+                modifier = modifier,
+                onRegistrationClick = {
+                    navController.navigate(Screen.AuthFlow.Registration.route)
+                },
+                onLoginClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
+            )
         }
     }
 }
 
 @Composable
 private fun MobilePortraitLandingScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRegistrationClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -74,14 +106,20 @@ private fun MobilePortraitLandingScreen(
                 contentDescription = stringResource(R.string.Label_Landing_Background_VO),
                 contentScale = ContentScale.FillWidth
             )
-            LandingCard(modifier = Modifier.align(Alignment.BottomCenter))
+            LandingCard(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onLoginClick
+            )
         }
     }
 }
 
 @Composable
 private fun MobileLandscapeLandingScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRegistrationClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Row(modifier = modifier.background(MaterialTheme.colorScheme.surfaceBright)) {
         Box(
@@ -107,7 +145,9 @@ private fun MobileLandscapeLandingScreen(
                     top = 40.dp,
                     end = 40.dp,
                     bottom = 40.dp
-                )
+                ),
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onRegistrationClick
             )
         }
     }
@@ -115,7 +155,9 @@ private fun MobileLandscapeLandingScreen(
 
 @Composable
 private fun TabletLandingScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRegistrationClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -139,7 +181,9 @@ private fun TabletLandingScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 60.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onRegistrationClick
             )
         }
     }
@@ -151,6 +195,8 @@ private fun LandingCard(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     roundedCornerShape: RoundedCornerShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
     contentPadding: PaddingValues = PaddingValues(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 16.dp),
+    onRegistrationClick : () -> Unit,
+    onLoginClick : () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -172,17 +218,13 @@ private fun LandingCard(
         NoteMarkButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.Label_Get_Started),
-            onClick = {
-                // TODO: Navigate to RegistrationScreen
-            }
+            onClick = onRegistrationClick
         )
         Spacer(modifier = Modifier.height(12.dp))
         NoteMarkButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.Label_Log_In),
-            onClick = {
-                // TODO: Navigate to LoginScreen
-            },
+            onClick = onLoginClick,
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             textColor = MaterialTheme.colorScheme.primary
         )
@@ -199,7 +241,10 @@ private fun LandingCard(
 @Composable
 private fun MobilePortraitLandingScreenPreview() {
     NoteMarkTheme {
-        MobilePortraitLandingScreen()
+        MobilePortraitLandingScreen(
+            onRegistrationClick = {},
+            onLoginClick = {}
+        )
     }
 }
 
@@ -213,7 +258,10 @@ private fun MobilePortraitLandingScreenPreview() {
 @Composable
 private fun MobileLandscapeLandingScreenPreview() {
     NoteMarkTheme {
-        MobileLandscapeLandingScreen()
+        MobileLandscapeLandingScreen(
+            onRegistrationClick = {},
+            onLoginClick = {}
+        )
     }
 }
 
@@ -228,6 +276,9 @@ private fun MobileLandscapeLandingScreenPreview() {
 @Composable
 private fun TabletPortraitLandingScreenPreview() {
     NoteMarkTheme {
-        TabletLandingScreen()
+        TabletLandingScreen(
+            onRegistrationClick = {},
+            onLoginClick = {}
+        )
     }
 }

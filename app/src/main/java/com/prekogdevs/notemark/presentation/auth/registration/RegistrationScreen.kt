@@ -1,4 +1,4 @@
-package com.prekogdevs.notemark.presentation.registration
+package com.prekogdevs.notemark.presentation.auth.registration
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,20 +24,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
 import com.prekogdevs.notemark.presentation.NoteMarkLink
 import com.prekogdevs.notemark.presentation.NoteMarkTextField
 import com.prekogdevs.notemark.presentation.components.NoteMarkHeader
 import com.prekogdevs.notemark.presentation.landingCardModifier
+import com.prekogdevs.notemark.presentation.navigation.Screen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
 @Composable
-fun RegistrationScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     // TODO: Move logic to VM
     // TODO: Reduce copy paste
     // TODO: Make screen scrollable?
+    // TODO: Top part of the screen does not match design
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,7 +61,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 password = password,
                 onPasswordChanged = { password = it },
                 passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it }
+                onRepeatedPasswordChanged = { passwordRepeated = it },
+                onAlreadyHaveAnAccountClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
             )
         }
 
@@ -69,7 +78,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 password = password,
                 onPasswordChanged = { password = it },
                 passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it }
+                onRepeatedPasswordChanged = { passwordRepeated = it },
+                onAlreadyHaveAnAccountClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
             )
         }
 
@@ -84,7 +96,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 password = password,
                 onPasswordChanged = { password = it },
                 passwordRepeated = passwordRepeated,
-                onRepeatedPasswordChanged = { passwordRepeated = it }
+                onRepeatedPasswordChanged = { passwordRepeated = it },
+                onAlreadyHaveAnAccountClick = {
+                    navController.navigate(Screen.AuthFlow.Login.route)
+                }
             )
         }
     }
@@ -100,7 +115,8 @@ private fun MobilePortraitRegistrationScreen(
     password: String,
     onPasswordChanged: (String) -> Unit,
     passwordRepeated: String,
-    onRepeatedPasswordChanged: (String) -> Unit
+    onRepeatedPasswordChanged: (String) -> Unit,
+    onAlreadyHaveAnAccountClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -120,7 +136,8 @@ private fun MobilePortraitRegistrationScreen(
             password = password,
             onPasswordChanged = onPasswordChanged,
             passwordRepeated = passwordRepeated,
-            onRepeatedPasswordChanged = onRepeatedPasswordChanged
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged,
+            onAlreadyHaveAnAccountClick = onAlreadyHaveAnAccountClick
         )
     }
 }
@@ -135,7 +152,8 @@ private fun MobileLandscapeRegistrationScreen(
     password: String,
     onPasswordChanged: (String) -> Unit,
     passwordRepeated: String,
-    onRepeatedPasswordChanged: (String) -> Unit
+    onRepeatedPasswordChanged: (String) -> Unit,
+    onAlreadyHaveAnAccountClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -159,7 +177,8 @@ private fun MobileLandscapeRegistrationScreen(
             password = password,
             onPasswordChanged = onPasswordChanged,
             passwordRepeated = passwordRepeated,
-            onRepeatedPasswordChanged = onRepeatedPasswordChanged
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged,
+            onAlreadyHaveAnAccountClick = onAlreadyHaveAnAccountClick
         )
     }
 }
@@ -174,7 +193,8 @@ private fun TabletRegistrationScreen(
     password: String,
     onPasswordChanged: (String) -> Unit,
     passwordRepeated: String,
-    onRepeatedPasswordChanged: (String) -> Unit
+    onRepeatedPasswordChanged: (String) -> Unit,
+    onAlreadyHaveAnAccountClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -198,7 +218,8 @@ private fun TabletRegistrationScreen(
             password = password,
             onPasswordChanged = onPasswordChanged,
             passwordRepeated = passwordRepeated,
-            onRepeatedPasswordChanged = onRepeatedPasswordChanged
+            onRepeatedPasswordChanged = onRepeatedPasswordChanged,
+            onAlreadyHaveAnAccountClick = onAlreadyHaveAnAccountClick
         )
     }
 }
@@ -213,7 +234,8 @@ private fun RegistrationFormSection(
     password: String,
     onPasswordChanged: (String) -> Unit,
     passwordRepeated: String,
-    onRepeatedPasswordChanged: (String) -> Unit
+    onRepeatedPasswordChanged: (String) -> Unit,
+    onAlreadyHaveAnAccountClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -265,9 +287,7 @@ private fun RegistrationFormSection(
         NoteMarkLink(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             text = stringResource(R.string.Label_Already_Have_Account),
-            onClick = {
-                // TODO
-            }
+            onClick = onAlreadyHaveAnAccountClick
         )
     }
 }
@@ -291,7 +311,8 @@ private fun MobilePortraitRegistrationScreenPreview() {
             password = "",
             onPasswordChanged = {},
             passwordRepeated = "",
-            onRepeatedPasswordChanged = {}
+            onRepeatedPasswordChanged = {},
+            onAlreadyHaveAnAccountClick = {}
         )
     }
 }
@@ -315,7 +336,8 @@ private fun MobileLandscapeRegistrationScreenPreview() {
             password = "",
             onPasswordChanged = {},
             passwordRepeated = "",
-            onRepeatedPasswordChanged = {}
+            onRepeatedPasswordChanged = {},
+            onAlreadyHaveAnAccountClick = {}
         )
     }
 }
@@ -347,7 +369,8 @@ private fun TabletRegistrationScreenPreview() {
             password = "",
             onPasswordChanged = {},
             passwordRepeated = "",
-            onRepeatedPasswordChanged = {}
+            onRepeatedPasswordChanged = {},
+            onAlreadyHaveAnAccountClick = {}
         )
     }
 }

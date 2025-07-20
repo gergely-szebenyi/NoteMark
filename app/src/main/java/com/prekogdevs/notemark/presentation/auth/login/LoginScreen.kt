@@ -31,12 +31,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
 import com.prekogdevs.notemark.presentation.NoteMarkLink
 import com.prekogdevs.notemark.presentation.NoteMarkTextField
 import com.prekogdevs.notemark.presentation.components.NoteMarkHeader
 import com.prekogdevs.notemark.presentation.landingCardModifier
+import com.prekogdevs.notemark.presentation.navigation.Screen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 import org.koin.androidx.compose.koinViewModel
@@ -44,7 +46,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel,
+    navController: NavController
 ) {
     val uiState by viewModel.state.collectAsState()
     // TODO: API call, error handling, loading indicator
@@ -66,6 +69,13 @@ fun LoginScreen(
                     password = uiState.password,
                     onPasswordChanged = {
                         viewModel.onEvent(Event.OnPasswordChanged(it))
+                    },
+                    onRegistrationClick = {
+                        navController.navigate(Screen.AuthFlow.Registration.route) {
+                            popUpTo(Screen.AuthFlow.Landing.route) {
+                                inclusive = false
+                            }
+                        }
                     }
                 )
             }
@@ -81,6 +91,13 @@ fun LoginScreen(
                     password = uiState.password,
                     onPasswordChanged = {
                         viewModel.onEvent(Event.OnPasswordChanged(it))
+                    },
+                    onRegistrationClick = {
+                        navController.navigate(Screen.AuthFlow.Registration.route) {
+                            popUpTo(Screen.AuthFlow.Landing.route) {
+                                inclusive = false
+                            }
+                        }
                     }
                 )
             }
@@ -97,6 +114,13 @@ fun LoginScreen(
                     password = uiState.password,
                     onPasswordChanged = {
                         viewModel.onEvent(Event.OnPasswordChanged(it))
+                    },
+                    onRegistrationClick = {
+                        navController.navigate(Screen.AuthFlow.Registration.route) {
+                            popUpTo(Screen.AuthFlow.Landing.route) {
+                                inclusive = false
+                            }
+                        }
                     }
                 )
             }
@@ -111,7 +135,8 @@ private fun MobilePortraitLoginScreen(
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    onRegistrationClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -128,7 +153,8 @@ private fun MobilePortraitLoginScreen(
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            onRegistrationClick = onRegistrationClick
         )
     }
 }
@@ -140,7 +166,8 @@ private fun MobileLandscapeLoginScreen(
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    onRegistrationClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -161,7 +188,8 @@ private fun MobileLandscapeLoginScreen(
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            onRegistrationClick = onRegistrationClick
         )
     }
 }
@@ -173,7 +201,8 @@ private fun TabletLoginScreen(
     email : String,
     onEmailChanged: (String) -> Unit,
     password : String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    onRegistrationClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -194,7 +223,8 @@ private fun TabletLoginScreen(
             email = email,
             onEmailChanged = onEmailChanged,
             password = password,
-            onPasswordChanged = onPasswordChanged
+            onPasswordChanged = onPasswordChanged,
+            onRegistrationClick = onRegistrationClick
         )
     }
 }
@@ -206,7 +236,8 @@ private fun LoginFormSection(
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    onRegistrationClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -243,9 +274,7 @@ private fun LoginFormSection(
         NoteMarkLink(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             text = stringResource(R.string.Label_Dont_Have_Account),
-            onClick = {
-                // TODO: Navigate to RegistrationScreen
-            }
+            onClick = onRegistrationClick
         )
     }
 }
@@ -266,7 +295,8 @@ private fun MobilePortraitLoginScreenPreview() {
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            onRegistrationClick = {}
         )
     }
 }
@@ -287,7 +317,8 @@ private fun MobileLandscapeLoginScreenPreview() {
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            onRegistrationClick = {}
         )
     }
 }
@@ -316,7 +347,8 @@ private fun TabletLoginScreenPreview() {
             email = "john.doe@example.com",
             onEmailChanged = {},
             password = "",
-            onPasswordChanged = {}
+            onPasswordChanged = {},
+            onRegistrationClick = {}
         )
     }
 }
