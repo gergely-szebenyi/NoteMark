@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
 internal fun Modifier.landingCardModifier() =
@@ -29,3 +30,15 @@ internal fun Modifier.landingCardModifier() =
             vertical = 24.dp
         )
         .consumeWindowInsets(WindowInsets.navigationBars)
+
+internal fun NavController.navigateAndPopUp(
+    route : String,
+    popUpTo : String,
+    isInclusive : Boolean = true
+) {
+    navigate(route) {
+        popUpTo(popUpTo) {
+            inclusive = isInclusive
+        }
+    }
+}

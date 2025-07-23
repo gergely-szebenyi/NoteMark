@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -29,12 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
+import com.prekogdevs.notemark.presentation.navigateAndPopUp
 import com.prekogdevs.notemark.presentation.navigation.Screen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
 
-// TODO: Reduce boilerplate
-// TODO: WindowsInsets
 @Composable
 fun LandingScreen(
     modifier: Modifier = Modifier,
@@ -42,41 +42,51 @@ fun LandingScreen(
 ) {
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
+    val onRegistrationClick = {
+        navController.navigateAndPopUp(
+            route = Screen.AuthFlow.Registration.route,
+            popUpTo = Screen.AuthFlow.Landing.route,
+            isInclusive = true
+        )
+    }
+    val onLoginClick = {
+        navController.navigateAndPopUp(
+            route = Screen.AuthFlow.Login.route,
+            popUpTo = Screen.AuthFlow.Landing.route,
+            isInclusive = true
+        )
+    }
+
     when (deviceConfiguration) {
         DeviceConfiguration.MOBILE_PORTRAIT -> {
             MobilePortraitLandingScreen(
                 modifier = modifier,
-                onRegistrationClick = {
-                    navController.navigate(Screen.AuthFlow.Registration.route)
-                },
-                onLoginClick = {
-                    navController.navigate(Screen.AuthFlow.Login.route)
-                }
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onLoginClick
             )
         }
 
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
             MobileLandscapeLandingScreen(
                 modifier = modifier,
-                onRegistrationClick = {
-                    navController.navigate(Screen.AuthFlow.Registration.route)
-                },
-                onLoginClick = {
-                    navController.navigate(Screen.AuthFlow.Login.route)
-                }
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onLoginClick
             )
         }
 
-        DeviceConfiguration.TABLET_PORTRAIT,
         DeviceConfiguration.TABLET_LANDSCAPE -> {
+            MobilePortraitLandingScreen(
+                modifier = modifier,
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onLoginClick
+            )
+        }
+
+        DeviceConfiguration.TABLET_PORTRAIT -> {
             TabletLandingScreen(
                 modifier = modifier,
-                onRegistrationClick = {
-                    navController.navigate(Screen.AuthFlow.Registration.route)
-                },
-                onLoginClick = {
-                    navController.navigate(Screen.AuthFlow.Login.route)
-                }
+                onRegistrationClick = onRegistrationClick,
+                onLoginClick = onLoginClick
             )
         }
     }
@@ -215,7 +225,7 @@ private fun LandingCard(
             text = stringResource(R.string.Label_Landing_Subtitle),
             style = MaterialTheme.typography.bodyLarge
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         NoteMarkButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.Label_Get_Started),

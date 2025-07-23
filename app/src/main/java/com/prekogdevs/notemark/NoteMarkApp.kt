@@ -9,7 +9,6 @@ class NoteMarkApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // TODO: Read about Koin
         startKoin {
             androidContext(this@NoteMarkApp)
             modules(authModule)
