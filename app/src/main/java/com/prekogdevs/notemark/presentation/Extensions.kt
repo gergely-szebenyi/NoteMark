@@ -1,7 +1,6 @@
 package com.prekogdevs.notemark.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +30,7 @@ internal fun Modifier.landingCardModifier() =
         )
         .consumeWindowInsets(WindowInsets.navigationBars)
 
-internal fun NavController.navigateAndPopUp(
+internal fun NavController.navigateAndPop(
     route : String,
     popUpTo : String,
     isInclusive : Boolean = true

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -30,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.prekogdevs.notemark.R
 import com.prekogdevs.notemark.presentation.NoteMarkButton
-import com.prekogdevs.notemark.presentation.navigateAndPopUp
+import com.prekogdevs.notemark.presentation.navigateAndPop
 import com.prekogdevs.notemark.presentation.navigation.Screen
 import com.prekogdevs.notemark.ui.theme.NoteMarkTheme
 import com.prekogdevs.notemark.util.DeviceConfiguration
@@ -43,14 +42,14 @@ fun LandingScreen(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
     val onRegistrationClick = {
-        navController.navigateAndPopUp(
+        navController.navigateAndPop(
             route = Screen.AuthFlow.Registration.route,
             popUpTo = Screen.AuthFlow.Landing.route,
             isInclusive = true
         )
     }
     val onLoginClick = {
-        navController.navigateAndPopUp(
+        navController.navigateAndPop(
             route = Screen.AuthFlow.Login.route,
             popUpTo = Screen.AuthFlow.Landing.route,
             isInclusive = true
